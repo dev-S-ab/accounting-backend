@@ -12,3 +12,7 @@ def add_account(account: schemas.AccountCreate, db: Session = Depends(get_db)):
 @router.get("/users/{user_id}/accounts/")
 def get_user_accounts(user_id: int, db: Session = Depends(get_db)):
     return crud.get_accounts_by_user(db, user_id)
+
+@router.post("/accounts/deposit/")
+def deposit(account_id: int, amount: float, db: Session = Depends(get_db)):
+    return crud.deposit_money(db, account_id, amount)

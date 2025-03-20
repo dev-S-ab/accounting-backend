@@ -60,3 +60,17 @@ def create_transaction(db: Session, from_account_id: int, to_account_id: int, am
     db.refresh(transaction)
 
     return transaction
+def deposit_money(db: Session, account_id: int, amount: float):
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Deposit amount must be greater than zero")
+
+    account = db.query(Account).filter(Account.id == account_id).first()
+
+    if not account:
+        raise HTTPException(status_code=404, detail=f"Account {account_id} not found")
+    
+    account.balance += amount
+    db.commit()
+    db.refresh(account)
+
+    return account
